@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "motion": "^12.36.0",
-    "next": "16.1.6",
+    "next": "^15.5.2",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
+    "@opennextjs/cloudflare": "^1.17.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
