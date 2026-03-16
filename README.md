@@ -1,36 +1,182 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 Arxiv Pulse
 
-## Getting Started
+<p align="center">
+  <img src="https://img.shields.io/github/stars/dropmoltbot/arxiv-pulse" alt="Stars">
+  <img src="https://img.shields.io/github/license/dropmoltbot/arxiv-pulse" alt="License">
+  <img src="https://img.shields.io/github/last-commit/dropmoltbot/arxiv-pulse" alt="Last Commit">
+  <img src="https://img.shields.io/github/deployments/dropmoltbot/arxiv-pulse/production" alt="Deployments">
+</p>
 
-First, run the development server:
+<p align="center">
+  <a href="https://arxiv-pulse.vercel.app">
+    <img src="https://vercel.com/button" alt="Deploy to Vercel">
+  </a>
+  <a href="https://arxiv-pulse.pages.dev">
+    <img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare">
+  </a>
+</p>
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| 🔍 **Smart Search** | Query ArXiv papers by topic, author, or keyword |
+| 🤖 **AI Summarization** | LLM-powered paper summaries using MiniMax or Ollama |
+| 🎯 **Topic Tracking** | Monitor specific research areas |
+| 📊 **Vector Storage** | Save & search papers with Pinecone embeddings |
+| 📱 **Telegram Alerts** | Get instant notifications for relevant papers |
+| ✨ **Smooth Animations** | Built with Motion.dev for premium UX |
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  ArXiv API      │────▶│  LLM (MiniMax)   │────▶│  Pinecone       │
+│  (papers fetch) │     │  (summarization) │     │  (vector store) │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+                                │
+                                ▼
+                        ┌─────────────────┐
+                        │  Telegram Bot   │
+                        │  (alerts)       │
+                        └─────────────────┘
+```
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/dropmoltbot/arxiv-pulse.git
+cd arxiv-pulse
+npm install
+```
+
+### 2. Configure Environment
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `MINIMAX_API_KEY` | API key from [MiniMax](https://platform.minimax.chat) | ✅ |
+| `PINECONE_API_KEY` | API key from [Pinecone](https://pinecone.io) | ❌ |
+| `OLLAMA_URL` | Local Ollama URL (fallback) | ❌ |
+| `TELEGRAM_BOT_TOKEN` | Bot token from @BotFather | ❌ |
+
+### 3. Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ☁️ Deployment
 
-## Learn More
+### Vercel (Recommended)
 
-To learn more about Next.js, take a look at the following resources:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/dropmoltbot/arxiv-pulse)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Click the button above
+2. Connect your GitHub
+3. Add `MINIMAX_API_KEY` in env vars
+4. Deploy! 🚀
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Cloudflare Pages
 
-## Deploy on Vercel
+1. Go to [Cloudflare Pages](https://pages.cloudflare.com)
+2. Connect `dropmoltbot/arxiv-pulse`
+3. Build settings:
+   - Build command: `npm run build`
+   - Output directory: `.next`
+4. Add env vars
+5. Deploy!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 Project Structure
+
+```
+arxiv-pulse/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx       # Main dashboard
+│   │   └── globals.css    # Global styles
+│   └── lib/
+│       ├── arxiv.ts       # ArXiv API client
+│       ├── llm.ts         # LLM (MiniMax/Ollama)
+│       └── pinecone.ts    # Vector store
+├── scripts/
+│   ├── deploy-vercel.sh
+│   └── deploy-cloudflare.sh
+├── public/                # Static assets
+├── SPEC.md               # Technical specification
+├── DEPLOY.md             # Deployment guide
+└── package.json
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | Next.js 15, React 19, TypeScript |
+| **Styling** | Tailwind CSS v4 |
+| **Animation** | Motion.dev |
+| **LLM** | MiniMax API + Ollama (fallback) |
+| **Vector DB** | Pinecone |
+| **Hosting** | Vercel / Cloudflare Pages |
+
+---
+
+## 🔧 Customization
+
+### Add New Topics
+
+Edit `src/app/page.tsx`:
+
+```typescript
+const DEFAULT_TOPICS = [
+  'LLM reasoning',
+  'agent systems',
+  'transformer architecture',
+  'AI safety',
+  'multimodal models',
+  'YOUR_NEW_TOPIC',  // Add here
+];
+```
+
+### Add New LLM Provider
+
+Edit `src/lib/llm.ts` to add Anthropic, OpenAI, etc.
+
+---
+
+## 📄 License
+
+MIT License — See [LICENSE](LICENSE)
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! Open an issue or PR.
+
+---
+
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/dropmoltbot">dropmoltbot</a>
+</p>
