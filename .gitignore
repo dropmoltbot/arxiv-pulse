@@ -39,3 +39,4 @@ yarn-error.log*
 # Debug logs
 logs/
 *.log
+.env.production
