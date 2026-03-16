@@ -1,12 +1,5 @@
 {
-  "name": "arxiv-pulse",
-  "description": "AI-powered ArXiv research dashboard",
-  "repository": "https://github.com/YOUR_USERNAME/arxiv-pulse",
-  "框架": "nextjs",
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
-  "installCommand": "npm install",
-  "env": {
-    "MINIMAX_API_KEY": "@minimax-api-key"
-  }
+  "installCommand": "npm install"
 }
