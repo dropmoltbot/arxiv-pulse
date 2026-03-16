@@ -1,42 +1,89 @@
-# Deploy to Vercel
+# Deployment
+
+## Vercel (Recommended)
+
+### Automatic Deploys
+
+Connect your GitHub repository to Vercel:
+1. Go to https://vercel.com/new
+2. Import `dropmoltbot/arxiv-pulse`
+3. Add environment variables:
+   - `MINIMAX_API_KEY` - Your MiniMax API key
+   - `PINECONE_API_KEY` - (optional) Pinecone API key
+
+### Manual Deploy
 
 ```bash
-cd arxiv-pulse
-./scripts/deploy-vercel.sh
-```
-
-Or manually:
-```bash
-npm i -g vercel
-vercel login
+npm run build
 vercel --prod
 ```
 
 ---
 
-# Deploy to Cloudflare Pages
+## Cron Job Setup
 
-```bash
-cd arxiv-pulse
-./scripts/deploy-cloudflare.sh
+The app fetches ArXiv papers automatically every 6 hours.
+
+### Option 1: Vercel Cron (Recommended)
+
+Add to `vercel.json`:
+
+```json
+{
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}
 ```
 
-Or manually:
+### Option 2: External Cron
+
+Use a service like Cron-Job.org or GitHub Actions:
+
+```yaml
+# .github/workflows/cron.yml
+name: ArXiv Fetch
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch papers
+        run: curl -x POST https://arxiv-pulse-seven.vercel.app/api/papers
+```
+
+### Option 3: Local Cron (on your server)
+
 ```bash
-npm i -g wrangler
-wrangler login
-wrangler pages project create arxiv-pulse
-wrangler pages deploy .next
+# Run every 6 hours
+crontab -e
+
+# Add this line:
+# 0 */6 * * * curl -x POST https://arxiv-pulse-seven.vercel.app/api/papers
 ```
 
 ---
 
-# Already Deployed?
+## Environment Variables
 
-If you've already deployed manually, add your URLs here:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `MINIMAX_API_KEY` | Yes | MiniMax API key for summarization |
+| `PINECONE_API_KEY` | No | Pinecone API key for vector storage |
+| `OLLAMA_URL` | No | Local Ollama URL (fallback) |
 
-## Vercel
-**URL:** https://arxiv-pulse.vercel.app
+---
 
-## Cloudflare  
-**URL:** https://arxiv-pulse.pages.dev
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/papers` | GET | Fetch latest papers |
+| `/api/cron` | POST | Cron endpoint (for scheduled jobs) |
